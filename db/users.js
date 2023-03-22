@@ -13,7 +13,7 @@ async function createUser({ username, password }) {
         INSERT INTO users(username, password)
         VALUES($1, $2)
         ON CONFLICT (username) DO NOTHING
-        RETURNING *
+        RETURNING *;
         `, [username, hashedPassword]);
 
     return rows;
@@ -54,11 +54,11 @@ async function getUserById(userId) {
     const { rows: [user] } = await client.query(`
       SELECT id, username
       FROM users
-      WHERE id=${userId}
+      WHERE id=${userId};
   `);
 
     if (!user) {
-      return null
+      return null;
     }
 
     return user;
