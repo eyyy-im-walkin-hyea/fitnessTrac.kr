@@ -6,7 +6,7 @@ const morgan = require('morgan');
 
 // MIDDLEWARE
 server.use(morgan('dev'));
-server.use(express.json())
+server.use(express.json());
 server.use((req, res, next) => {
     console.log("<____Body Logger START____>");
     console.log(req.body);
@@ -20,7 +20,7 @@ const apiRouter = require('./api');
 server.use('/api', apiRouter);
 
 // CONNECT CLIENT
-const { client } = require('./db');
+const client = require("./db/client");
 client.connect();
 
 // SERVER START UP
