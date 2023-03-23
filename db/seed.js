@@ -28,7 +28,12 @@ const {
   getRoutineActivitiesByRoutine,
   updateRoutineActivity,
   destroyRoutineActivity,
-  canEditRoutineActivity
+  canEditRoutineActivity,
+  getAllActivities,
+  getActivityById,
+  getActivityByName,
+  attachActivitiesToRoutines,
+  createActivity
 } = require('./');
 const client = require("./client")
 
@@ -81,6 +86,7 @@ try {
       UNIQUE("routineId", "activityId")
       );
 `)
+        console.log("Finished building tables.")
 } catch (error) {
     console.error("Error building tables!");
     throw error;
