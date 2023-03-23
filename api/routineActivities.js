@@ -38,29 +38,19 @@ routineActivitiesRouter.patch('/:routineActivityId', requireUser, async (req, re
 })
 // DELETE /api/routine_activities/:routineActivityId
 routineActivitiesRouter.delete('/:routineActivityId', requireUser, async (req, res, next) => {
-    const { routineActivityId } = req.params;
+    const {routineActivityId} = req.params;
     const routineActivity = await getRoutineActivityById(routineActivityId);
-
     try {
-        const routine = await getRoutineById(req.params.postId);
-
-        if (post && post.creatorId === req.user.id) {
-            const updatedPost = await updatePost(post.id, { active: false });
-
-            res.send({ post: updatedPost });
+        const routine = await getRoutineById(routineActivity.routineId);
+        if (routine.creatorId === req.user.id) {
+            const deletedRoutineActivity = await destroyRoutineActivity(routineActivityId)
+            res.send(deletedRoutineActivity);
         } else {
-            // if there was a post, throw UnauthorizedUserError, otherwise throw PostNotFoundError
-            next(post ? {
-                name: "UnauthorizedUserError",
-                message: "You cannot delete a post which is not yours"
-            } : {
-                name: "PostNotFoundError",
-                message: "That post does not exist"
-            });
+            next(error);
         }
-
-    } catch ({ name, message }) {
-        next({ name, message })
+    }
+    catch (error) {
+        next(error);
     }
 });
 
