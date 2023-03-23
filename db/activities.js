@@ -74,37 +74,21 @@ async function getActivityByName(name) {
 
 }
 
-// used as a helper inside db/routines.js
-async function attachActivitiesToRoutines(routines) { }
 
 
-async function updateActivity({ id, ...fields }) {
-  // don't try to update the id
-  // do update the name and description
-  // return the updated activity
-  const { name, description } = fields;
-  delete fields.name;
-  delete fields.description;
-
-  const setString = Object.keys(fields).map(
-    (key, index) => `"${key}"=$${index + 1}`
-  ).join(', ');
-
-  if (setString.length === 0) {
-    return;
-  }
-
+const updateActivity = async ({ id, name, description }) => {
   try {
-    const result = await client.query(`
-        UPDATE activities
-        SET name=$1, description=$2, ${setString}
-        WHERE id=$3
-        RETURNING *;
-      `, [name, description, id, ...Object.values(fields)]);
+      const { rows: [activity] } = await client.query(`
+          UPDATE activities
+          SET name=$1, description=$2
+          WHERE id=$3
+          RETURNING *;
+      `, [name, description, id]);
 
-    return result.rows[0];
-  } catch (error) {
-    throw error;
+      return activity;
+  }
+  catch (error) {
+      throw error
   }
 }
 
