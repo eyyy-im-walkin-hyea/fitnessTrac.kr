@@ -1,8 +1,10 @@
 /* eslint-disable no-useless-catch */
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { getUserByUsername, createUser, getUser } = require("../db/users");
+const { getPublicRoutinesByUser } = require("../db/routines");
 
 router.use((req,res,next) => {
     console.log("A request is being made to /users");
@@ -11,7 +13,7 @@ router.use((req,res,next) => {
 
 });
 // POST /api/users/register
-router.post("/api/users/register", async (req,res,next) => {
+router.post("/register", async (req,res,next) => {
     const {username, password} = req.body 
     try {
         const _user = await getUserByUsername(username);
@@ -49,7 +51,7 @@ router.post("/api/users/register", async (req,res,next) => {
     }
 });
 // POST /api/users/login
-router.post("/api/users/login", async (req,res,next) => {
+router.post("/login", async (req,res,next) => {
     const { username, password } = req.body;
 
     if (!username || !password) { // Request body must have both a username & password.
@@ -89,16 +91,50 @@ router.post("/api/users/login", async (req,res,next) => {
 });
 
 // GET /api/users/me
-router.get("/api/users/me", async (req,res,next) => {
+router.get("/me", async (req,res,next) => {
     try {
-        const individualUser = req.body;
         const userToken = req.headers.authorization.split(" ")[1];
-        const decryptedUserToken = jwt.verify(userToken, process.env)
+        const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
+
+        const user = await getUser(decryptedUserToken.username)
+        
+        if(user.username == decryptedUserToken.username) {
+            res.send({
+                id: user.id,
+                username: username
+            });
+        } else {
+            next({
+                name: "Invalid Token",
+                message: "Please log in."
+            });
+        }
+
+
+
     } catch ({name, message}) {
         next({name, message});
     }
 })
 
 // GET /api/users/:username/routines
+router.get("/:username/routines", async (req,res,next) => {
+    try {
+        const userToken = req.headers.authorization.split(" ")[1];
+        const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
+        const {user} = await getUserByUsername(req.params.username)
+        if (decryptedUserToken.username && user.username == req.user.username) {
+            const userRoutines = await getPublicRoutinesByUser(user.id)
+            res.send(userRoutines);
+        } else {
+            next({
+                name: "User Not Valid",
+                message: "Cannot get routines. User is not valid."
+            });
+        }
+    } catch (error) {
+        throw error;
+    }
+})
 
 module.exports = router;
