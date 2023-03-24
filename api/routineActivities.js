@@ -25,7 +25,7 @@ routineActivitiesRouter.patch('/:routineActivityId', requireUser, async (req, re
             const updatedRoutine= await updateRoutineActivity(routineActivityId, updateFields);
             res.send({ routine_activity: updatedRoutine })
         } else {
-            next({
+            res.send({
                 name: 'UnauthorizedUserError',
                 message: 'You cannot update a routine that is not yours'
             })
@@ -46,7 +46,7 @@ routineActivitiesRouter.delete('/:routineActivityId', requireUser, async (req, r
             const deletedRoutineActivity = await destroyRoutineActivity(routineActivityId)
             res.send(deletedRoutineActivity);
         } else {
-            next(error);
+            res.send(error);
         }
     }
     catch (error) {

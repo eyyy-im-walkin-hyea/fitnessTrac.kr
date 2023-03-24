@@ -42,7 +42,7 @@ routinesRouter.post('/', requireUser, async (req, res, next) => {
         if(routine) {
         res.send({routine});
         } else {
-            next({
+            res.send({
                 name: "routinePostError",
                 message: "Error w/ api routinesRouter.post"
             })
@@ -66,7 +66,7 @@ routinesRouter.post("/:routineId/activities", requireUser, async (req, res, next
         if (routine.creatorId === req.user.id) {
             res.send(activityToRoutine);
         } else {
-            next(error);
+            res.send(error);
         }
     }
     catch (error) {
@@ -102,7 +102,7 @@ const updateFields = {};
             const updatedRoutine = await updateRoutine(routineId, updateFields);
             res.send({routine: updatedRoutine});
         } else {
-            next({
+            res.send({
             name: 'Error', 
             description: 'You cannot update routine'
             })
@@ -124,7 +124,7 @@ routinesRouter.delete('/:routineId', requireUser, async (req, res, next) => {
             const deletedRoutine = await destroyRoutine(routineId)
             res.send(deletedRoutine);
         } else {
-            next(error);
+            res.send(error);
         }
     }
     catch (error) {

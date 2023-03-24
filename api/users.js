@@ -135,7 +135,7 @@ router.get("/:username/routines", async (req,res,next) => {
             const userRoutines = await getPublicRoutinesByUser(user.id)
             res.send(userRoutines);
         } else {
-            next({
+            res.send({
                 name: "User Not Valid",
                 message: "Cannot get routines. User is not valid."
             });
