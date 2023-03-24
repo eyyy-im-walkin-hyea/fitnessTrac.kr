@@ -42,14 +42,14 @@ async function getActivityById(id) {
     `, [id]);
 
     if (!activity) {
-        throw {
-            name: "ActivityNotFoundError",
-            message: "Could not find an activity with that id!"
-        };
+      throw {
+        name: "ActivityNotFoundError",
+        message: "Could not find an activity with that id!"
+      };
     }
     return activity;
   } catch (error) {
-      throw error;
+    throw error;
   }
 }
 
@@ -62,49 +62,34 @@ async function getActivityByName(name) {
     `, [name]);
 
     if (!activity) {
-        throw {
-            name: "ActivityNotFoundError",
-            message: "Could not find an activity with that name!"
-        };
+      throw {
+        name: "ActivityNotFoundError",
+        message: "Could not find an activity with that name!"
+      };
     }
     return activity;
   } catch (error) {
-      throw error;
+    throw error;
   }
 
 }
 
-// used as a helper inside db/routines.js
-async function attachActivitiesToRoutines(routines) { }
 
-  // don't try to update the id
-  // do update the name and description
-  // return the updated activity
-async function updateActivity({ id, ...fields }) {
-    const { name, description } = fields;
-    delete fields.name;
-    delete fields.description;
-  
-    const setString = Object.keys(fields).map(
-      (key, index) => `"${key}"=$${index + 1}`
-    ).join(', ');
-  
-    if (setString.length === 0) {
-      return;
-    }
-  
-    try {
-      const result = await client.query(`
-        UPDATE activities
-        SET name=$1, description=$2, ${setString}
-        WHERE id=$3
-        RETURNING *
-      `, [name, description, id, ...Object.values(fields)]);
-  
-      return result.rows[0];
-    } catch (error) {
-      throw error;
-    }
+
+const updateActivity = async ({ id, name, description }) => {
+  try {
+      const { rows: [activity] } = await client.query(`
+          UPDATE activities
+          SET name=$1, description=$2
+          WHERE id=$3
+          RETURNING *;
+      `, [name, description, id]);
+
+      return activity;
+  }
+  catch (error) {
+      throw error
+  }
 }
 
 module.exports = {

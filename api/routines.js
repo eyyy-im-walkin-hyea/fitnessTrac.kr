@@ -1,14 +1,119 @@
 const express = require('express');
-const router = express.Router();
+const routinesRouter = express.Router();
+const { requireUser } = require('./utils');
+const {
+    createRoutine,
+    getRoutineById,
+    getAllPublicRoutines,
+    updateRoutine,
+} = require("../db");
+
+
+// USE
+routinesRouter.use((req, res, next) => {
+    console.log("Request made to /routines");
+    next(); 
+});
+
 
 // GET /api/routines
+// Return a list of public routines, include the activities with them
+routinesRouter.get("/", async (req, res) => {
+    try {
+        const allPubRoutines = await getAllPublicRoutines();
+        res.send(allPubRoutines);
+    } catch (error) {
+        console.log(error, "Error w/ apiRoutines");
+    }
+});
+
 
 // POST /api/routines
+//Create a new routine
+// -----REQUIRES A LOGGED IN USER-----
+routinesRouter.post('/', requireUser, async (req, res, next) => {
+    const { creatorId, name, goal, public } = req.body;
+    const routineData = {creatorId , public, name, goal};
+  
+    try {
+        const routine = await createRoutine(routineData);
 
-// PATCH /api/routines/:routineId
+        if(routine) {
+        res.send({routine});
+        } else {
+            next({
+                name: "routinePostError",
+                message: "Error w/ api routinesRouter.post"
+            })
+        }
+    } catch ({ name, message }) {
+        next({ name, message });
+    }
+});
 
-// DELETE /api/routines/:routineId
 
 // POST /api/routines/:routineId/activities
+// Attach a single activity to a routine. Prevent duplication on (routineId, activityId) pair.
 
-module.exports = router;
+
+// PATCH /api/routines/:routineId
+//Update a routine, notably change public/private, the name, or the goal
+// -----REQUIRES A LOGGED IN USER THAT IS THE AUTHOR-----
+routinesRouter.patch('/:routineId', requireUser, async (req, res, next) => {
+const {routineId} = req.params;
+const {isPublic, name, goal} = req.body;
+const updateFields = {};
+
+    if(isPublic) {
+        updateFields.isPublic = isPublic;
+    };
+
+    if(name) {
+        updateFields.name = name;
+    };
+
+    if(goal) {
+        updateFields.goal = goal;
+    };
+
+    try {
+        const originalRoutine = await getRoutineById(routineId);
+
+        if(originalRoutine) {
+            const updatedRoutine = await updateRoutine(routineId, updateFields);
+            res.send({routine: updatedRoutine});
+        } else {
+            next({
+            name: 'Error', 
+            description: 'You cannot update routine'
+            })
+        }
+    } catch({name, message}) {
+        next({name, message})
+    }
+});
+
+
+// DELETE /api/routines/:routineId
+// ard delete a routine. Make sure to delete all the routineActivities whose routine is the one being deleted.
+// -----REQUIRES A LOGGED IN USER THAT IS THE AUTHOR-----
+routinesRouter.delete('/routineId', requireUser, async (req, res, next) => {
+    try {
+        const routine = await getRoutineById(req.params.routineId);
+
+        if(routine) {
+            res.send({routine});
+        } else {
+            next({
+            name: 'Error',
+            message: 'Error deleting routine'
+            })
+        }
+    } catch({name, message}) {
+        next({name, message})
+        }
+    });
+
+
+
+module.exports = routinesRouter;
