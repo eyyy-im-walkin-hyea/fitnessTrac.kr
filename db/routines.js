@@ -1,6 +1,4 @@
-// const client = require("./client");
-const { Client } = require('pg');
-const client = new Client('postgres://localhost:5432/fitness-dev');
+const client = require("./client");
 
 
 // CREATE A ROUTINE
