@@ -6,6 +6,7 @@ const {
     getRoutineById,
     getAllPublicRoutines,
     updateRoutine,
+    addActivityToRoutine
 } = require("../db");
 
 
@@ -54,6 +55,24 @@ routinesRouter.post('/', requireUser, async (req, res, next) => {
 
 // POST /api/routines/:routineId/activities
 // Attach a single activity to a routine. Prevent duplication on (routineId, activityId) pair.
+routinesRouter.post("/:routineId/activities", requireUser, async (req, res, next) => {
+    const routineId = req.params.routineId;
+    const { activityId, count, duration } = req.body;
+
+    try {
+        const routine = await getRoutineById(routineId);
+        const activityToRoutine = await addActivityToRoutine({ routineId, activityId, count, duration });
+
+        if (routine.creatorId === req.user.id) {
+            res.send(activityToRoutine);
+        } else {
+            next(error);
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+});
 
 
 // PATCH /api/routines/:routineId
@@ -97,22 +116,21 @@ const updateFields = {};
 // DELETE /api/routines/:routineId
 // ard delete a routine. Make sure to delete all the routineActivities whose routine is the one being deleted.
 // -----REQUIRES A LOGGED IN USER THAT IS THE AUTHOR-----
-routinesRouter.delete('/routineId', requireUser, async (req, res, next) => {
+routinesRouter.delete('/:routineId', requireUser, async (req, res, next) => {
+    const {routineId} = req.params;
+    const routine = await getRoutineById(req.params.routineId);
     try {
-        const routine = await getRoutineById(req.params.routineId);
-
-        if(routine) {
-            res.send({routine});
+        if (routine.creatorId === req.user.id) {
+            const deletedRoutine = await destroyRoutine(routineId)
+            res.send(deletedRoutine);
         } else {
-            next({
-            name: 'Error',
-            message: 'Error deleting routine'
-            })
+            next(error);
         }
-    } catch({name, message}) {
-        next({name, message})
-        }
-    });
+    }
+    catch (error) {
+        next(error);
+    }
+});
 
 
 
