@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/eyyy-im-walkin-hyea/fitnessTrac.kr/issues"
   },
-  "homepage": "https://github.com/eyyy-im-walkin-hyea/fitnessTrac.kr#readme",
+  "homepage": "/",
   "dependencies": {
     "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
@@ -36,5 +36,17 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
