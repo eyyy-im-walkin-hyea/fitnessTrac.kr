@@ -10,7 +10,7 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
             ON CONFLICT (name) DO NOTHING
             RETURNING *;
             `, [creatorId, isPublic, name, goal]);    
-        return rows;
+        return rows[0];
     } catch (error) {
         console.log("Error w/ createRoutine");
         throw error;
@@ -157,7 +157,7 @@ async function getPublicRoutinesByActivity(activityId) {
             FROM routines
             JOIN routine_activities ON routines.id=routine_activities."routineId"
             JOIN activities ON activities.id=routine_activities."activityId"
-            WHERE activities.name=$1
+            WHERE activities.id=$1
             AND "isPublic"=$2;
             `, [activityId, "true"]);
 

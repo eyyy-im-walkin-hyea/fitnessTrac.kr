@@ -76,21 +76,45 @@ async function getActivityByName(name) {
 
 
 
-const updateActivity = async ({ id, name, description }) => {
+// async function updateActivity ({ id, name, description }) {
+//   try {
+//       const { rows: [activity] } = await client.query(`
+//           UPDATE activities
+//           SET name=$2, description=$3
+//           WHERE id=$1
+//           RETURNING *;
+//       `, [id, name, description]);
+
+//       return activity;
+//   }
+//   catch (error) {
+//       throw error
+//   }
+// }
+
+async function updateActivity(id, fields = {}) {
+  const setString = Object.keys(fields).map(
+      (key, index) => `"${ key }"=$${ index + 1 }`
+  ).join(', ');
+
+  if(setString.length === 0) {
+      return;
+  }
+
   try {
-      const { rows: [activity] } = await client.query(`
+      const {rows: [activity] } = await client.query(`
           UPDATE activities
-          SET name=$1, description=$2
-          WHERE id=$3
+          SET ${setString}
+          WHERE id=${id}
           RETURNING *;
-      `, [name, description, id]);
+      `, Object.values(fields));
 
       return activity;
+  } catch (error) {
+      console.log("Error w/ updateRoutine");
+      throw error;
   }
-  catch (error) {
-      throw error
-  }
-}
+};
 
 module.exports = {
   getAllActivities,
