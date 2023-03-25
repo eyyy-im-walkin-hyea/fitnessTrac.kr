@@ -60,14 +60,14 @@ async function getRoutineActivitiesByRoutine({ id }) {
 }
 
 
-async function updateRoutineActivity({ id, count, duration }) {
+async function updateRoutineActivity({ id, duration, count }) {
   try {
     const { rows: [routine_activity] } = await client.query(`
         UPDATE routine_activities
-        SET count=$1, duration=$2
+        SET duration=$1, count=$2
         WHERE id=${id}
         RETURNING *;
-    `, [count, duration]);
+    `, [duration, count]);
 
     return routine_activity;
   }
