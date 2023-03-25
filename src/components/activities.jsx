@@ -1,11 +1,33 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const DATABASE_URL = `postgres://localhost:5432/fitness-dev`
 
 
 const Activities = ({ activity, setActivity }) => {
+    const [activities, setActivities] = useState([]);
     const [name, setName] = useState([]);
     const [description, setDescription] = useState([]);
+
+    useEffect(() => {
+        const allActivities = async () => {
+            try {
+                const response = await fetch(`${DATABASE_URL}/activities`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Access-Control-Allow-Origin": "*",
+                        "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+                        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
+                    },
+                });
+
+                const result = await response.json();
+                allActivities(result);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        allActivities();
+    },[])
 
     const makeActivities = async (e) => {
         e.preventDefault();
@@ -47,7 +69,7 @@ const Activities = ({ activity, setActivity }) => {
                 <h4>
                     Create an activity!
                 </h4>
-
+                {/* Submit form for creating new posts */}
                 <form onSubmit={makeActivities}>
                     <input
                         type="text"
@@ -67,6 +89,15 @@ const Activities = ({ activity, setActivity }) => {
                     </button>
 
                 </form>
+            </div>
+            {/* Shows the posts */}
+            <div> 
+                {
+                    activities(activity => <div key={activity.id}>
+                        <p>{activity.name}</p>
+                        <p>{activity.description}</p>
+                        </div>)
+                }
             </div>
         </div>
 
