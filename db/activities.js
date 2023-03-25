@@ -1,6 +1,9 @@
+// IMPORTING the client
 const client = require('./client');
 
-// database functions
+// ACTIVITIES FUNCTIONS
+
+// Create an activity.
 async function createActivity({ name, description }) {
   try {
     const { rows: [activity] } = await client.query(`
@@ -12,11 +15,11 @@ async function createActivity({ name, description }) {
     return activity;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+// Return all activities.
 async function getAllActivities() {
-  // select and return an array of all activities
   try {
     const { rows: activityIds } = await client.query(`
     SELECT id
@@ -30,9 +33,10 @@ async function getAllActivities() {
     return activities;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+// Return a specified activity.
 async function getActivityById(id) {
   try {
     const { rows: [activity] } = await client.query(`
@@ -46,13 +50,14 @@ async function getActivityById(id) {
         name: "ActivityNotFoundError",
         message: "Could not find an activity with that id!"
       };
-    }
+    };
     return activity;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+// Return an activity by name.
 async function getActivityByName(name) {
   try {
     const { rows: [activity] } = await client.query(`
@@ -66,32 +71,14 @@ async function getActivityByName(name) {
         name: "ActivityNotFoundError",
         message: "Could not find an activity with that name!"
       };
-    }
+    };
     return activity;
   } catch (error) {
     throw error;
-  }
+  };
+};
 
-}
-
-
-
-// async function updateActivity ({ id, name, description }) {
-//   try {
-//       const { rows: [activity] } = await client.query(`
-//           UPDATE activities
-//           SET name=$2, description=$3
-//           WHERE id=$1
-//           RETURNING *;
-//       `, [id, name, description]);
-
-//       return activity;
-//   }
-//   catch (error) {
-//       throw error
-//   }
-// }
-
+// Update a provided activity.
 async function updateActivity(id, fields = {}) {
   const setString = Object.keys(fields).map(
       (key, index) => `"${ key }"=$${ index + 1 }`
@@ -99,7 +86,7 @@ async function updateActivity(id, fields = {}) {
 
   if(setString.length === 0) {
       return;
-  }
+  };
 
   try {
       const {rows: [activity] } = await client.query(`
@@ -113,9 +100,10 @@ async function updateActivity(id, fields = {}) {
   } catch (error) {
       console.log("Error w/ updateRoutine");
       throw error;
-  }
+  };
 };
 
+// EXPORTING all activity functions. 
 module.exports = {
   getAllActivities,
   getActivityById,

@@ -1,6 +1,6 @@
 import {createRoot} from "react-dom/client";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { Placeholder } from "./components/index";
+import { Activities, Homepage, Login, MyRoutines, Registration, Routines, Logout } from "./components/index";
 
 
 const App = () => {
@@ -10,17 +10,23 @@ const App = () => {
         <BrowserRouter>
             <div>
                 <nav className="">
-                    <Link to="/placeholder" className="">Placeholder1</Link>
+                    {/* <Link to="/placeholder" className="">Placeholder1</Link> */}
 
                 </nav>
 
-                <Header/>
+                {/* <Header/> */}
 
                 <Routes>
-                    <Route path="/placeholder" element={<Placeholder/>}/>
+                    <Route path="/" element={<Homepage />}/>
+                    <Route path="/activities" element={<Activities />}/>
+                    <Route path="/login" element={<Login />}/>
+                    <Route path="/myroutines" element={<MyRoutines />}/>
+                    <Route path="/register" element={<Registration />}/>
+                    <Route path="/routines" element={<Routines />}/>
+                    <Route path="/logout" element={<Logout />}/>
                 </Routes>
 
-                <Footer />
+                {/* <Footer /> */}
 
             </div>
         </BrowserRouter>
