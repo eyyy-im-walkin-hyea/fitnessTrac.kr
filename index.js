@@ -3,10 +3,12 @@ const PORT = 3000;
 const express = require('express');
 const server = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
 // MIDDLEWARE
 server.use(morgan('dev'));
 server.use(express.json());
+server.use(cors());
 server.use((req, res, next) => {
     console.log("<____Body Logger START____>");
     console.log(req.body);
