@@ -21,7 +21,7 @@ router.post("/register", async (req,res,next) => {
         const _user = await getUserByUsername(username);
         console.log(_user);
         if (_user) { // If a user by that name already exists. 
-        console.log("Made into if statement on line 23")
+       
         
             res.send({
                 name: "UserAlreadyExists",
@@ -99,20 +99,28 @@ router.post("/login", async (req,res,next) => {
 });
 
 // GET /api/users/me
-router.get("/me", async (req,res,next) => {
+router.get("/me",  async (req,res,next) => {
+    console.log("/me RH");
     try {
+
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
+        
+        console.log("Decrypted token:", decryptedUserToken)
+        
+        const user = await getUserByUsername(decryptedUserToken.username)
 
-        const user = await getUser(decryptedUserToken.username)
+        console.log("User:", user)
         
         if(user.username == decryptedUserToken.username) {
+            console.log("Inside if statement");
             res.send({
                 id: user.id,
-                username: username
+                username: decryptedUserToken.username
             });
         } else {
-            next({
+            console.log("inside else statement");
+            res.send({
                 name: "Invalid Token",
                 message: "Please log in."
             });
@@ -126,12 +134,23 @@ router.get("/me", async (req,res,next) => {
 })
 
 // GET /api/users/:username/routines
-router.get("/:username/routines", async (req,res,next) => {
+router.get("/:username/routines",  async (req,res,next) => {
     try {
+        // console.log("Below: Headers, req.user, req.params, decryptedToken, user from getUserByUsername")
+        // console.log(req.headers) // see headers
+        // console.log(req.user) // undefined
+        // console.log(req.params); // albert
+        // console.log("This is req.params.username:", req.params.username)
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
-        const {user} = await getUserByUsername(req.params.username)
-        if (decryptedUserToken.username && user.username == req.user.username) {
+
+        // console.log(decryptedUserToken); // albert object with id, iat, exp
+
+        const user = await getUserByUsername(req.params.username);
+
+        console.log(user); // undefined
+
+        if (decryptedUserToken.username && user.username == decryptedUserToken.username) {
             const userRoutines = await getPublicRoutinesByUser(user.id)
             res.send(userRoutines);
         } else {
@@ -141,7 +160,7 @@ router.get("/:username/routines", async (req,res,next) => {
             });
         }
     } catch (error) {
-        throw error;
+        console.log(error);
     }
 })
 

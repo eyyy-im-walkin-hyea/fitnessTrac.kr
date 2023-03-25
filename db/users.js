@@ -24,18 +24,22 @@ async function createUser({ username, password }) {
 
 async function getUser({ username, password }) { 
   try {
+    console.log("username", username)
     const { rows } = await client.query(`
       SELECT id, username, password
       FROM users
       WHERE username = $1;
     `, [username]);
 
+    console.log("rows", rows);
     if (rows.length === 0) {
       throw new Error('User not found');
     }
 
     const user = rows[0];
+    console.log("user", user)
     const hashedPassword = user.password;
+    console.log("hash pw", hashedPassword)
 
     const isValid = await bcrypt.compare(password, hashedPassword);
     if (!isValid) {
