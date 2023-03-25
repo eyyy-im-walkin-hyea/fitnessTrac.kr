@@ -1,52 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useParams } from 'react';
 
-const Routines = (props) => {
+const Routines = () => {
 
-    const { routinesProps } = props;
-    const [searchQuery, setSearchQuery] = useState("");
-    const DATABASE_URL = `postgres://localhost:5432/fitness-dev`;
+    const DATABASE_URL = `postgres://localhost:5432/fitness-dev/api`;
 
-// FILTER WITH SEARCHBOX & SET TO LOWERCASE
-    let filteredRoutines = routinesProps.filter((singleRoutinesElement) => {
-        let lowercasedCreatorId = singleRoutinesElement.creatorId.toLowerCase();
-        let lowercasedName = singleRoutinesElement.name.toLowerCase();
-        let lowercasedGoal = singleRoutinesElement.goal.toLowerCase();
-        return lowercasedName.includes(searchQuery.toLowerCase()) || 
-            lowercasedGoal.includes(searchQuery.toLowerCase()) ||
-            lowercasedCreatorId.includes(searchQuery.toLowerCase())
-    })
 
-// FETCH DATA FROM DB
-    const fetchData = async () => {
+    const getRoutinesData = async () => {
         try {
-            const response = await fetch (`${DATABASE_URL}/routines`);
-            const translatedData = await response.json();
-            props.setRoutinesProps(translatedData.routines)
-        }   catch (error) {
-            document.body.style.cursor = "wait";
-            console.log("Error w/ fetchData func in routines.jsx", error);
+        const response = await fetch(`${DATABASE_URL}/routines`, {
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        });
+    
+            const result = await response.json();
+            console.log("Results from getRoutinesData: ", result);
+            return result
+        } catch (err) {
+            console.error("Error w/ getRoutinesData :", err);
         }
-    };
-    useEffect(() => {
-        fetchData()
-    },[]);
+    }
 
     return (
-        <section>
-            <div>
-{/* SEARCHBOX */}
-                <input 
-                    className="searchbox"
-                    type="text"
-                    placeholder="Search Routines..."
-                    onChange={(event) => {
-                            setSearchQuery(event.target.value)
-                    }}>
-                </input>
-            </div>
-                <br/>
+        <section>Hello from Dave {getRoutinesData}
 {/* ANY USER NOT LOGGED IN */}
-            <div>{
+            {/* <div>{
                 filteredRoutines.length && filteredRoutines.isPublic ? filteredRoutines.map((singleRoutinesElement, i) => {
                     return (
                         <div key={id}> 
@@ -81,7 +59,7 @@ const Routines = (props) => {
                     )
                 }) : <div> No post matching your request. Try Again
                 </div>
-            }</div>
+            }</div> */}
         </section>
     )
 }
@@ -98,7 +76,20 @@ export default Routines;
 
 
 
-
+// FETCH DATA FROM DB
+    // const fetchData = async () => {
+    //     try {
+    //         const response = await fetch (`${DATABASE_URL}/routines`);
+    //         const translatedData = await response.json();
+    //         props.setRoutinesProps(translatedData.routines)
+    //     }   catch (error) {
+    //         document.body.style.cursor = "wait";
+    //         console.log("Error w/ fetchData func in routines.jsx", error);
+    //     }
+    // };
+    // useEffect(() => {
+    //     fetchData()
+    // },[]);
 
 // return (
 //     <div>
