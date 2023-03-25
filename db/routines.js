@@ -1,7 +1,9 @@
+// IMPORTING the client.
 const client = require("./client");
 
+// ROUTINE FUNCTIONS
 
-// CREATE A ROUTINE
+// Create a routine.
 async function createRoutine({ creatorId, isPublic, name, goal }) {
     try {
         const { rows } = await client.query(`
@@ -12,13 +14,12 @@ async function createRoutine({ creatorId, isPublic, name, goal }) {
             `, [creatorId, isPublic, name, goal]);    
         return rows[0];
     } catch (error) {
-        console.log("Error w/ createRoutine");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET A ROUTINE BY ID
+// Get a routine by provided id.
 async function getRoutineById(routineId) {
     try {
         const { rows: [ routine ] } = await client.query(`
@@ -43,13 +44,12 @@ async function getRoutineById(routineId) {
         routine.activities = activities;
         return routine;
     } catch (error) {
-        console.log("Error w/ getRoutineById");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET ALL ROUTINES W/O ACTIVITIES
+// Get routines without activities.
 async function getRoutinesWithoutActivities() {
     try{
         const { rows } = await client.query(`
@@ -59,13 +59,12 @@ async function getRoutinesWithoutActivities() {
 
         return rows;
     } catch (error) {
-        console.log("Error w/ getAllRoutinesWithoutActivities");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET ALL ROUTINES W/ ACTIVITIES
+// Get routines with activities.
 async function getAllRoutines() {
     try {
         const { rows: [ routine ] } = await client.query(`
@@ -83,13 +82,12 @@ async function getAllRoutines() {
         routine.activities = activities;
         return routine;
     } catch (error) {
-        console.log("Error w/ getAllRoutines");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET ALL PUBLIC ROUTINES
+// Get all public routines.
 async function getAllPublicRoutines() {
     try{
         
@@ -100,13 +98,12 @@ async function getAllPublicRoutines() {
         `, ["true"]);
         return rows;  
     } catch (error) {
-        console.log("Error w/ getAllPublicRoutines");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET ALL ROUTINES BY USER ID
+// Get all routines by a provided user id.
 async function getAllRoutinesByUser({ userId}) {
     try {
         const { rows : routineIds } = await client.query(`
@@ -121,13 +118,12 @@ async function getAllRoutinesByUser({ userId}) {
 
         return routines;
     } catch (error) {
-        console.log("Error w/ getAllRoutinesByUser");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET PUBLIC ROUTINES BY USER ID
+// Get public routines by user id.
 async function getPublicRoutinesByUser(userId) {
     try {
         const { rows : routineIds } = await client.query(`
@@ -143,13 +139,12 @@ async function getPublicRoutinesByUser(userId) {
 
         return routines;
     } catch (error) {
-        console.log("Error w/ getPublicRoutinesByUser");
         throw error;
-    }
-}
+    };
+};
 
 
-// GET PUBLIC ROUTINES BY ACTIVITY
+// Get public routines by activity.
 async function getPublicRoutinesByActivity(activityId) {
     try {
         const { rows: routineIds } = await client.query(`
@@ -165,13 +160,12 @@ async function getPublicRoutinesByActivity(activityId) {
                 routine => getRoutineById(routine.id)
         ));
     } catch(error) {
-        console.log("Error w/ getPublicRoutinesByActivity");
         throw error;
-    }
-}
+    };
+};
 
 
-// UPDATE A ROUTINE
+// Update a specified routine.
 async function updateRoutine(id, fields = {}) {
     const setString = Object.keys(fields).map(
         (key, index) => `"${ key }"=$${ index + 1 }`
@@ -191,13 +185,12 @@ async function updateRoutine(id, fields = {}) {
   
         return routine;
     } catch (error) {
-        console.log("Error w/ updateRoutine");
         throw error;
-    }
+    };
 };
 
 
-// DELETE A ROUTINE
+// Delete a routine by provided routine id.
 async function destroyRoutine(id) {
     try {
         await client.query(`
@@ -207,12 +200,11 @@ async function destroyRoutine(id) {
         
         return `DELETED ROUTINE NUMBER: ${id}`
     } catch(error) {
-        console.log("Error w/ destroyRoutine");
         throw error;
-    }
-}
+    };
+};
 
-
+// EXPORTING routines functions.
 module.exports = {
   getRoutineById,
   getRoutinesWithoutActivities,

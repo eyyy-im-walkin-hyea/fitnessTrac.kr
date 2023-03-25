@@ -1,3 +1,4 @@
+// IMPORTING necessary modules & database functions.
 const express = require('express');
 const routinesRouter = express.Router();;
 const jwt = require("jsonwebtoken");
@@ -11,42 +12,34 @@ const {
 } = require("../db");
 
 
-// USE
+// Middleware to test /api/routines
 routinesRouter.use((req, res, next) => {
     console.log("Request made to /routines");
     next(); 
 });
 
 
-// GET /api/routines
-// Return a list of public routines, include the activities with them
+// GET request - Purpose: Return a list of public routines, including the activities associated with the routine.
 routinesRouter.get("/", async (req, res) => {
     try {
         const allPubRoutines = await getAllPublicRoutines();
         res.send(allPubRoutines);
     } catch (error) {
         next(error, "Error w/ apiRoutines");
-    }
+    };
 });
 
 
-// POST /api/routines
-//Create a new routine
-// -----REQUIRES A LOGGED IN USER-----
+// POST request - Purpose: Create a new routine as a logged in user.
 routinesRouter.post('/',  async (req, res, next) => {
     const { isPublic, name, goal,  } = req.body;
-    console.log("Req body:", req.body);
     
-    
-  
     try {
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
         
         const routine = await createRoutine({ creatorId: decryptedUserToken.id, isPublic, name, goal});
-        console.log(routine)
-        console.log(routine.creatorId)
-        console.log(decryptedUserToken.id)
+    
         if (routine && routine.creatorId == decryptedUserToken.id ) {
             res.send({routine});
         } else {
@@ -61,35 +54,27 @@ routinesRouter.post('/',  async (req, res, next) => {
 });
 
 
-// POST /api/routines/:routineId/activities
-// Attach a single activity to a routine. Prevent duplication on (routineId, activityId) pair.
+// POST request - Purpose: Attach a single activity to a routine. Prevent duplication on (routineId, activityId) pair.
 routinesRouter.post("/:routineId/activities", async (req, res, next) => {
     const routineId = req.params.routineId;
-    console.log("Req params:", req.params)
     const { activityId, count, duration } = req.body;
-    console.log("Req body:", req.body);
 
     try {
-        const userToken = req.headers.authorization.split(" ")[1];
-        const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
-        const routine = await getRoutineById(routineId);
         const activityToRoutine = await addActivityToRoutine({ routineId, activityId, count, duration });
 
         if (activityToRoutine) {
             res.send(activityToRoutine);
         } else {
             res.send(error);
-        }
+        };
     }
     catch (error) {
         next(error);
-    }
+    };
 });
 
 
-// PATCH /api/routines/:routineId
-//Update a routine, notably change public/private, the name, or the goal
-// -----REQUIRES A LOGGED IN USER THAT IS THE AUTHOR-----
+// PATCH request - Purpose: Update a routine and change isPublic (true or false),  name, or goal as a logged in user.
 routinesRouter.patch('/:routineId', async (req, res, next) => {
 const {routineId} = req.params;
 const {isPublic, name, goal} = req.body;
@@ -118,17 +103,15 @@ const updateFields = {};
             res.send({
             name: 'Error', 
             description: 'You cannot update routine'
-            })
-        }
+            });
+        };
     } catch({name, message}) {
-        next({name, message})
-    }
+        next({name, message});
+    };
 });
 
 
-// DELETE /api/routines/:routineId
-// ard delete a routine. Make sure to delete all the routineActivities whose routine is the one being deleted.
-// -----REQUIRES A LOGGED IN USER THAT IS THE AUTHOR-----
+// DELETE request - Purpose: Hard delete a routine as a logged in user.
 routinesRouter.delete('/:routineId',  async (req, res, next) => {
     const {routineId} = req.params;
     const routine = await getRoutineById(req.params.routineId);
@@ -136,20 +119,19 @@ routinesRouter.delete('/:routineId',  async (req, res, next) => {
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
         if (routine.creatorId == decryptedUserToken.id) {
-            const deletedRoutine = await destroyRoutine(routineId)
+            const deletedRoutine = await destroyRoutine(routineId);
             res.send(deletedRoutine);
         } else {
             res.send({
                 name: "Delete Error",
                 message: "Error deleting routine, please log in and try again."
             });
-        }
-    }
-    catch (error) {
+        };
+    } catch (error) {
         next(error);
-    }
+    };
 });
 
 
-
+// EXPORTING the route handler.
 module.exports = routinesRouter;

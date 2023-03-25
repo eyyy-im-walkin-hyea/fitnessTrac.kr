@@ -1,13 +1,3 @@
-/* 
-DO NOT CHANGE THIS FILE
-*/
-// const client = require('./client');
-// const { rebuildDB } = require('./seedData');
-
-// rebuildDB()
-//   .catch(console.error)
-//   .finally(() => client.end());
-// require in the database adapter functions as you write them (createUser, createActivity...)
 const {
   createUser,
   getUser,
@@ -268,17 +258,13 @@ try {
   await createInitialActivities()
   await createInitialRoutines()
   await createInitialRoutineActivities()
+
+  console.log("Finished rebuilding the database.")
 } catch (error) {
   console.log("Error during rebuildDB")
   throw error
 }
 }
-
-// module.exports = {
-//   rebuildDB,
-//   dropTables,
-//   createTables,
-// }
 
 rebuildDB()
   // .then(testDB)
