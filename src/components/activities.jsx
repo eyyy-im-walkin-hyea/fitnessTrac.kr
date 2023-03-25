@@ -3,11 +3,11 @@ import { useState } from "react";
 const DATABASE_URL = `postgres://localhost:5432/fitness-dev`
 
 
-const CreateActivity = ({ activity, setActivity }) => {
+const Activities = ({ activity, setActivity }) => {
     const [name, setName] = useState([]);
     const [description, setDescription] = useState([]);
 
-    const submitHandler = async (e) => {
+    const makeActivities = async (e) => {
         e.preventDefault();
         try {
             console.log('name, description:', name, description);
@@ -48,7 +48,7 @@ const CreateActivity = ({ activity, setActivity }) => {
                     Create an activity!
                 </h4>
 
-                <form onSubmit={submitHandler}>
+                <form onSubmit={makeActivities}>
                     <input
                         type="text"
                         placeholder="name"
@@ -74,4 +74,4 @@ const CreateActivity = ({ activity, setActivity }) => {
 
 }
 
-export default CreatePost;
+export default Activities;
