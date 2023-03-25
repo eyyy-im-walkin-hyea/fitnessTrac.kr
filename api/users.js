@@ -1,28 +1,28 @@
-/* eslint-disable no-useless-catch */
+// IMPORTING necessary modules & database functions.
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const { getUserByUsername, createUser, getUser } = require("../db/users");
+const { getUserByUsername, createUser } = require("../db/users");
 const { getPublicRoutinesByUser } = require("../db/routines");
 const bcrypt = require("bcrypt");
 
 
+// Middleware to test api/users
 router.use((req,res,next) => {
     console.log("A request is being made to /users");
 
     next();
 
 });
-// POST /api/users/register
+
+// POST request - Purpose: Create a new user, requiring username and password.
 router.post("/register", async (req,res,next) => {
-    const {username, password} = req.body 
+    const {username, password} = req.body;
     try {
         const _user = await getUserByUsername(username);
-        console.log(_user);
-        if (_user) { // If a user by that name already exists. 
-       
-        
+
+        if (_user) {  
             res.send({
                 name: "UserAlreadyExists",
                 message: "A user by that name already exists."
@@ -33,37 +33,31 @@ router.post("/register", async (req,res,next) => {
                 message: "Password must be a minimum of 8 characters."
             });
         } else {
-
-
-        const user = await createUser({username, password});
-        console.log("CreateUser data:", user)
-        
-
-        if (user.id) {
-            const token = jwt.sign({
-                id: user.id,
-                username
-            }, process.env.JWT_SECRET, {
-                expiresIn: "1w"
-            });
-            res.send({
-            message: "Thank you for signing up to our website!",
-            token
-        })};
-    };
+            const user = await createUser({username, password});
+                if (user.id) {
+                    const token = jwt.sign({
+                        id: user.id,
+                        username
+                    }, process.env.JWT_SECRET, {
+                        expiresIn: "1w"
+                    });
+                        res.send({
+                        message: "Thank you for signing up to our website!",
+                        token
+                })};
+        };
         
     } catch (error) {
-        console.log("Error in catch block")
         next(error);
     }
 });
-// POST /api/users/login
+
+// POST request - Purpose: Log in a created user.
 router.post("/login", async (req,res,next) => {
-    
     try {
         const { username, password } = req.body;
 
-    if (!username || !password) { // Request body must have both a username & password.
+    if (!username || !password) {
         res.send({
             name: "Missing Credentials!",
             message: "Please supply both a username and password!"
@@ -80,7 +74,7 @@ router.post("/login", async (req,res,next) => {
                 expiresIn: "1w"
             });
              // Create token 
-            res.send({                                              // Sending token & successful log-in message back to user. 
+            res.send({                                               
                 message: "You are now logged in!",
                 token: token
             });
@@ -92,76 +86,55 @@ router.post("/login", async (req,res,next) => {
             });
         }
     } catch (error) {
-        console.log("This is the catch block error");
         next(error);
-    }
+    };
 
 });
 
-// GET /api/users/me
+// GET request - Purpose: Send back logged-in user's data if a valid token is supplied in the header.
 router.get("/me",  async (req,res,next) => {
-    console.log("/me RH");
     try {
-
         const userToken = req.headers.authorization.split(" ")[1];
-        const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
-        
-        console.log("Decrypted token:", decryptedUserToken)
-        
-        const user = await getUserByUsername(decryptedUserToken.username)
+        const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);       
+        const user = await getUserByUsername(decryptedUserToken.username);
 
-        console.log("User:", user)
-        
         if(user.username == decryptedUserToken.username) {
-            console.log("Inside if statement");
             res.send({
                 id: user.id,
                 username: decryptedUserToken.username
             });
         } else {
-            console.log("inside else statement");
             res.send({
                 name: "Invalid Token",
                 message: "Please log in."
             });
-        }
-
-
+        };
 
     } catch ({name, message}) {
         next({name, message});
-    }
-})
+    };
+});
 
-// GET /api/users/:username/routines
+// GET request - Purpose: Return a list of public routines for a logged-in user. 
 router.get("/:username/routines",  async (req,res,next) => {
     try {
-        // console.log("Below: Headers, req.user, req.params, decryptedToken, user from getUserByUsername")
-        // console.log(req.headers) // see headers
-        // console.log(req.user) // undefined
-        // console.log(req.params); // albert
-        // console.log("This is req.params.username:", req.params.username)
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
-
-        // console.log(decryptedUserToken); // albert object with id, iat, exp
-
         const user = await getUserByUsername(req.params.username);
 
-        console.log(user); // undefined
-
         if (decryptedUserToken.username && user.username == decryptedUserToken.username) {
-            const userRoutines = await getPublicRoutinesByUser(user.id)
+            const userRoutines = await getPublicRoutinesByUser(user.id);
             res.send(userRoutines);
         } else {
             res.send({
                 name: "User Not Valid",
                 message: "Cannot get routines. User is not valid."
             });
-        }
+        };
     } catch (error) {
         console.log(error);
-    }
-})
+    };
+});
 
+// EXPORTING the route handler. 
 module.exports = router;

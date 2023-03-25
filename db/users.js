@@ -1,9 +1,10 @@
+// IMPORTING the client & encrypting / hashing password dependencies.
 const client = require("./client");
 const bcrypt = require('bcrypt');
 
-// database functions
+// USER FUNCTIONS
 
-// user functions
+// Create a new user.
 async function createUser({ username, password }) {
   try {
     const saltCount = 12;
@@ -19,29 +20,26 @@ async function createUser({ username, password }) {
     return rows[0];
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+// Get a specified user by username.
 async function getUser({ username, password }) { 
   try {
-    console.log("username", username)
     const { rows } = await client.query(`
       SELECT id, username, password
       FROM users
       WHERE username = $1;
     `, [username]);
 
-    console.log("rows", rows);
     if (rows.length === 0) {
       throw new Error('User not found');
     }
 
     const user = rows[0];
-    console.log("user", user)
     const hashedPassword = user.password;
-    console.log("hash pw", hashedPassword)
-
     const isValid = await bcrypt.compare(password, hashedPassword);
+
     if (!isValid) {
       throw new Error('Invalid password');
     }
@@ -49,10 +47,10 @@ async function getUser({ username, password }) {
     return user;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
-
+// Get a user by user id.
 async function getUserById(userId) {
   try {
     const { rows: [user] } = await client.query(`
@@ -68,8 +66,10 @@ async function getUserById(userId) {
     return user;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
+
+// Get a user by username.
 async function getUserByUsername(username) {
   try {
     const { rows: [user] } = await client.query(`
@@ -81,8 +81,10 @@ async function getUserByUsername(username) {
     return user;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
+
+// EXPORTING the users functions.
 
 module.exports = {
   createUser,

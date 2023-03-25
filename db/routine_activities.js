@@ -1,5 +1,9 @@
+// IMPORTING the client.
 const client = require("./client");
 
+// ROUTINE_ACTIVITIES FUNCTIONS
+
+// Adding a new activity to a routine.
 async function addActivityToRoutine({
   routineId,
   activityId,
@@ -15,9 +19,10 @@ async function addActivityToRoutine({
     return routine_activity;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+// Returning a specified routine_activity.
 async function getRoutineActivityById(id) {
   try {
     const { rows: [routine_activity] } = await client.query(`
@@ -31,13 +36,14 @@ async function getRoutineActivityById(id) {
         name: "RoutineNotFoundError",
         message: "Could not find a routine with that id!"
       };
-    }
+    };
     return routine_activity;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+// Return all routine_activities from a specified routine.
 async function getRoutineActivitiesByRoutine({ id }) {
   try {
     const { rows: routine_activities } = await client.query(`
@@ -51,15 +57,15 @@ async function getRoutineActivitiesByRoutine({ id }) {
         name: "RoutineNotFoundError",
         message: "Could not find any routine activities for the specified routine!"
       };
-    }
+    };
 
     return routine_activities;
   } catch (error) {
     throw error;
-  }
-}
+  };
+};
 
-
+// Updating a routine_activity.
 async function updateRoutineActivity({ id, duration, count }) {
   try {
     const { rows: [routine_activity] } = await client.query(`
@@ -73,9 +79,11 @@ async function updateRoutineActivity({ id, duration, count }) {
   }
   catch (error) {
     throw error;
-  }
-}
+  };
+};
 
+
+// Remove routine_activity from the database.
 async function destroyRoutineActivity(id) {
   try {
     const { rows: [routine_activity] } = await client.query(`
@@ -86,10 +94,10 @@ async function destroyRoutineActivity(id) {
     return routine_activity;
   } catch (error) {
     throw error
-  }
-}
+  };
+};
 
-
+// EXPORTING routine_activity functions.
 module.exports = {
   getRoutineActivityById,
   addActivityToRoutine,
