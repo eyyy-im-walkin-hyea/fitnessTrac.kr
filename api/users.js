@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const { getUserByUsername, createUser } = require("../db/users");
-const { getPublicRoutinesByUser } = require("../db/routines");
+const { getAllRoutinesByUser } = require("../db/routines");
 const bcrypt = require("bcrypt");
 
 
@@ -115,7 +115,7 @@ router.get("/me",  async (req,res,next) => {
     };
 });
 
-// GET request - Purpose: Return a list of public routines for a logged-in user. 
+// GET request - Purpose: Return a list of all routines for a logged-in user. 
 router.get("/:username/routines",  async (req,res,next) => {
     try {
         const userToken = req.headers.authorization.split(" ")[1];
@@ -123,7 +123,7 @@ router.get("/:username/routines",  async (req,res,next) => {
         const user = await getUserByUsername(req.params.username);
 
         if (decryptedUserToken.username && user.username == decryptedUserToken.username) {
-            const userRoutines = await getPublicRoutinesByUser(user.id);
+            const userRoutines = await getAllRoutinesByUser(user.id);
             res.send(userRoutines);
         } else {
             res.send({

@@ -104,7 +104,7 @@ async function getAllPublicRoutines() {
 
 
 // Get all routines by a provided user id.
-async function getAllRoutinesByUser({ userId}) {
+async function getAllRoutinesByUser(userId) {
     try {
         const { rows : routineIds } = await client.query(`
             SELECT *
