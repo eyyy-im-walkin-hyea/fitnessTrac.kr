@@ -51,7 +51,7 @@ const Register = () => {
                 alert(translatedData.message)
                 const myJWT = translatedData.token;
                 localStorage.setItem("token", myJWT)
-                navigate("/")
+                navigate("/profile");
             }
 
         } catch (error) {
