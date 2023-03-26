@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const DATABASE_URL = `http://localhost:1337/api`
 
 const Register = () => {
     const [newUsername, setNewUsername] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const navigate = useNavigate()
 
-    async function sendRegisterNewAccountReq(e) {
-        e.preventDefault();
+    async function sendRegisterNewAccountReq(event) {
+        event.preventDefault();
         try {
             console.log("New username is " + newUsername);
             console.log("New password is " + newPassword);
@@ -20,15 +21,15 @@ const Register = () => {
                 return;
             }
             if (newUsername.length < 5) {
-                alert("Username is too short! Must be over 5 characters long..");
+                alert("Username is too short! Must be over 5 characters long.");
                 return;
             } else if (newPassword.length < 8) {
-                alert("Password is too short! Must be over 8 characters long..");
+                alert("Password is too short! Must be at least 8 characters long.");
                 return;
             }
     
 
-            const response = await fetch("postgres://localhost:5432/fitness-dev/users/register", {
+            const response = await fetch(`${DATABASE_URL}/users/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -37,18 +38,18 @@ const Register = () => {
                     "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
                 },
                 body: JSON.stringify({
-                    user: {
                         username: newUsername,
                         password: newPassword
-                    }
+                    
                 })
-            })
+            });
             const translatedData = await response.json();
             console.log(translatedData)
-            if (!translatedData.success) {
-                alert("Account was not successfully created. Please try again!")
+            if (!translatedData.token) {
+                alert(translatedData.message)
             } else {
-                const myJWT = translatedData.data.token;
+                alert(translatedData.message)
+                const myJWT = translatedData.token;
                 localStorage.setItem("token", myJWT)
                 navigate("/")
             }
@@ -59,6 +60,7 @@ const Register = () => {
     }
     return (
         <div>
+            <h2> Fill in the forms below to create an account:</h2>
             <form onSubmit={sendRegisterNewAccountReq}>
                 <input
                     type="text"
@@ -67,7 +69,7 @@ const Register = () => {
                     onChange={(event) => setNewUsername(event.target.value)}
                 />
                 <input
-                    type="text"
+                    type="password"
                     placeholder="Password"
                     value={newPassword}
                     onChange={(event) => setNewPassword(event.target.value)}

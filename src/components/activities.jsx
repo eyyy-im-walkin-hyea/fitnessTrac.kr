@@ -33,7 +33,7 @@ const Activities = (props) => {
     const createActivity = async (event) => {
         event.preventDefault();
         try {
-          const response = await fetch(`${BASE_URL}/activities`, {
+          const response = await fetch(`${DATABASE_URL}/activities`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
@@ -48,8 +48,10 @@ const Activities = (props) => {
           const translatedData = await response.json();
       
           console.log(translatedData);
-          if(translatedData.success) {
+          if(translatedData.id) {
             setActivities([...activities, translatedData]);
+            setDescription("");
+            setName("");
           } else {
             alert("Creating activity failed.");
           }
@@ -57,7 +59,9 @@ const Activities = (props) => {
         } catch (err) {
           console.error(err);
         }
-      }
+      };
+
+      
     
       
             
