@@ -1,13 +1,18 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 const DATABASE_URL = `http://localhost:1337/api`
 
 
 const Activities = (props) => {
     const [activities, setActivities] = useState([]);
+    const [updateName, setUpdateName] = useState("");
+    const [updateDescription, setUpdateDescription] = useState("");
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [publicRoutine, setPublicRoutine] = useState([]);
     const myJWT = localStorage.getItem("token");
 
+    
     useEffect(() => {
         allActivities();
       }, []);
@@ -61,8 +66,36 @@ const Activities = (props) => {
         }
       };
 
+      const updateActivity = async (activityId) => {
+        console.log("updateAct Id", activityId)
+        try {
+          const response = await fetch(`${DATABASE_URL}/activities/${activityId}`, {
+            method: "PATCH",
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${myJWT}`
+            },
+            body: JSON.stringify({
+              name: updateName,
+              description: updateDescription
+            })
+          });
       
-    
+            const translatedData = await response.json();
+            console.log(translatedData);
+            if (translatedData.id && myJWT) {
+                setActivities([...activities.filter((activity) => activity.id !== activityId), translatedData]);
+            }
+          } catch (err) {
+          console.error(err);
+          }
+      }
+      function updateButton (event) {
+        console.log("Button is clicked");
+        updateActivity(event.target.value)
+      };
+
+      
       
             
 
@@ -71,11 +104,35 @@ const Activities = (props) => {
         <div> 
             <section>
                 {
-                    activities ? activities.map((singleActivity) => {
+                    activities ? activities.map((singleActivity, index) => {
                         return (
                             <div key={singleActivity.id}>
                                 <h2> Activity Name: <u>{singleActivity.name}</u> </h2>
                                 <h2> Activity Description: <strong>{singleActivity.description}</strong></h2>
+                                {
+                                    props.isLoggedIn ?
+                                    <form  onSubmit={updateButton}>
+                                        <textarea
+                                        type="text"
+                                        placeholder="Update Activity Name"
+                                        value={singleActivity[index]}
+                                        rows="1"
+                                        cols="20"
+                                        onChange={(event) => setUpdateName(event.target.value)}/>
+                                        <textarea
+                                        type="text"
+                                        placeholder="Update Activity Description"
+                                        value={singleActivity[index]}
+                                        rows="1"
+                                        cols="20"
+                                        onChange={(event) => setUpdateDescription(event.target.value)}/>
+                                        <button type="submit" value={singleActivity.id}> Update Activity </button>
+                                        <Link to={`/activities/${singleActivity.id}/routines`}> Click here for routines with this activity.</Link>
+
+                                    </form>
+                                    : <div> Please login or create an account to update an activity.</div>
+                                }
+                               
                             </div>
                         )
                     }) : <h1> No activities loaded.</h1>
