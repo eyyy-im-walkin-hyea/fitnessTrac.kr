@@ -50,10 +50,10 @@ const App = () => {
                 {/* <Header/> */}
 
                 <Routes>
-                    <Route path="/" element={<Homepage />}/>
+                    <Route path="/" element={<Homepage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}/>
                     <Route path="/activities" element={<Activities isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData} />}/>
                     <Route path="/login" element={<Login />}/>
-                    {/* <Route path="/profile" element={<MyRoutines isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData}/>}/> */}
+                    <Route path="/profile" element={<MyRoutines isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData}/>}/>
                     <Route path="/register" element={<Registration />}/>
                     <Route path="/routines" element={<Routines isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData}/>}/>
                     <Route path="/logout" element={<Logout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>
