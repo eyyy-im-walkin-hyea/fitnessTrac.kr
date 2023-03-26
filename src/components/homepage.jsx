@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const DATABASE_URL = `postgres://localhost:5432/fitness-dev`;
+const BASE_URL = `http://localhost:1337/api`
 
 const Homepage = (props) => {
     const [myData, setMyData] = useState({})

@@ -63,43 +63,65 @@ async function getRoutinesWithoutActivities() {
     };
 };
 
+// adds the activities to the routines route
+async function attachActivitiesToRoutines(routines) {
+    try {
+        console.log(routines)
+        const {rows} = await client.query(`
+            SELECT * from activities
+            JOIN "routine_activities"
+            ON activities.id = "routine_activities"."activityId";
+        `);
+        console.log("This is routines in attachActivitiesToRoutines function");
+        console.log(routines)
+        for(let i=0; i<routines.length; i++){
+            let answer = rows.filter((singleActivity)=>{
+                if(singleActivity.routineId == routines[i].id){
+                    return true;
+                }else{
+                    return false;
+                }
+            })
+            routines[i].activities = answer;
+        }
+        return routines;
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 // Get routines with activities.
 async function getAllRoutines() {
-    try {
-        const { rows: [ routine ] } = await client.query(`
-            SELECT *
-            FROM routines
-        `,);
-  
-        const { rows: [ activities ] } = await client.query(`
-            SELECT *
-            FROM activities
-            JOIN routine_activities ON activities.id=routine_activities."activityId"
-            WHERE routine_activities."routineId"=$1;
-        `, [routineId]);
 
-        routine.activities = activities;
-        return routine;
+    try {
+        const{rows} = await client.query(`
+            SELECT * 
+            FROM routines; 
+        `);
+        let allroutines = await attachActivitiesToRoutines(rows);
+        return allroutines;
     } catch (error) {
-        throw error;
-    };
+        console.log(error);
+    }
 };
 
 
 // Get all public routines.
 async function getAllPublicRoutines() {
-    try{
-        
-        const { rows } = await client.query(`
-            SELECT *
-            FROM routines
-            WHERE "isPublic"=$1;
-        `, ["true"]);
-        return rows;  
+    try {
+        console.log("Start of the getAllPublicRoutines DB function");
+        const{rows} = await client.query(`
+            SELECT * 
+            FROM routines 
+            WHERE "isPublic"=true;
+        `);
+
+        let allRoutines = await attachActivitiesToRoutines(rows);
+        return allRoutines;  
+        // return rows;
     } catch (error) {
-        throw error;
-    };
+        console.log(error);
+    }
 };
 
 
