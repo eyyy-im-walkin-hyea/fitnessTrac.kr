@@ -19,9 +19,11 @@ router.use((req,res,next) => {
 // POST request - Purpose: Create a new user, requiring username and password.
 router.post("/register", async (req,res,next) => {
     const {username, password} = req.body;
+    console.log(req.body)
     try {
         const _user = await getUserByUsername(username);
-
+        console.log("Password type:", typeof password)
+        console.log("Username type:", typeof username)
         if (_user) {  
             res.send({
                 name: "UserAlreadyExists",
@@ -64,6 +66,7 @@ router.post("/login", async (req,res,next) => {
         });
     };
         const user = await getUserByUsername(username);
+        console.log(user)
         const areTheyTheSame = await bcrypt.compare(password, user.password);
 
         if (user && areTheyTheSame) { // If the user exists & user password matches password from the request body...

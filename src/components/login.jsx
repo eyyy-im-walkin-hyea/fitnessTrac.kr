@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+const DATABASE_URL = `http://localhost:1337/api`
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -20,7 +21,7 @@ const Login = () => {
                 return;
             }
 
-            const response = await fetch("postgres://localhost:5432/fitness-dev/users/login", {
+            const response = await fetch(`${DATABASE_URL}/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -29,18 +30,18 @@ const Login = () => {
                     "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
                 },
                 body: JSON.stringify({
-                    user: {
                         username: username,
                         password: password
-                    }
+                    
                 })
-            })
+            });
             const translatedData = await response.json();
             console.log(translatedData)
-            if (!translatedData.success) {
+            if (!translatedData.message) {
                 alert("Login failed. Please try again!")
             } else {
-                const myJWT = translatedData.data.token;
+                const myJWT = translatedData.token;
+                alert(translatedData.message)
                 localStorage.setItem("token", myJWT)
                 navigate("/")
             }
