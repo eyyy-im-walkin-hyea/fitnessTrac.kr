@@ -1,41 +1,106 @@
-import React from "react";
 import { useState, useEffect } from "react";
-const DATABASE_URL = `postgres://localhost:5432/fitness-dev/api`
+const DATABASE_URL = `http://localhost:1337/api`
 
 
 const Activities = (props) => {
     const [activities, setActivities] = useState([]);
-    const [name, setName] = useState([]);
-    const [description, setDescription] = useState([]);
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const myJWT = localStorage.getItem("token");
 
-    const allRoutines = async () => {
+    useEffect(() => {
+        allActivities();
+      }, []);
+
+    const allActivities = async () => {
         try {
-          const response = await fetch(`${DATABASE_URL}/activities`, {
+          const response = await fetch(`${DATABASE_URL}/activities/`, {
             headers: {
                 'Content-Type': 'application/json',
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
             },
           });
       
-          const routineData = await response.json();
+          const activityData = await response.json();
       
-          console.log(routineData);
-          return routineData
+          console.log(activityData);
+          setActivities(activityData);
+          return activityData
+        } catch (err) {
+          console.error(err);
+        };
+      };
+    
+    const createActivity = async (event) => {
+        event.preventDefault();
+        try {
+          const response = await fetch(`${BASE_URL}/activities`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${myJWT}`
+            },
+            body: JSON.stringify({
+              name: name,
+              description: description
+            }) 
+          });
+      
+          const translatedData = await response.json();
+      
+          console.log(translatedData);
+          if(translatedData.success) {
+            setActivities([...activities, translatedData]);
+          } else {
+            alert("Creating activity failed.");
+          }
+          
         } catch (err) {
           console.error(err);
         }
       }
     
-      useEffect(() => {
-        allRoutines();
-      }, []);
+      
             
 
 
     return (
-        <div> Hi </div>
+        <div> 
+            <section>
+                {
+                    activities ? activities.map((singleActivity) => {
+                        return (
+                            <div key={singleActivity.id}>
+                                <h2> Activity Name: <u>{singleActivity.name}</u> </h2>
+                                <h2> Activity Description: <strong>{singleActivity.description}</strong></h2>
+                            </div>
+                        )
+                    }) : <h1> No activities loaded.</h1>
+                }
+                 { 
+                    props.isLoggedIn ? 
+                    <form className="messageSender" onSubmit={createActivity}>
+                        <textarea
+                        type="text" 
+                        placeholder="Enter Activity Name"
+                        rows="2"
+                        cols="25"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}/>
+                        <textarea
+                        type="text"
+                        placeholder="Enter Activity Description"
+                        rows="2"
+                        cols="25"
+                        value={description}
+                        onChange={(event) => setDescription(event.target.value)} />
+                        <button type="submit" id="sendMessageButton"> Create New Activity  </button>
+                    </form> : <div className="messageSender"> You do not have access to send a message. Please login or create account. </div>
+                }
+            </section>
+            
+
+
+        </div>
     )
 }
 
