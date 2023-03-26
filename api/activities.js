@@ -52,6 +52,7 @@ router.post("/", async (req, res, next) => {
 // PATCH request - Purpose: To update an activity, via either name, description, or both.
 router.patch("/:activityId", async (req, res, next) => {
         const { activityId  } = req.params;
+        console.log(activityId);
         const { name, description } = req.body;
         const updateFields = {};
 
