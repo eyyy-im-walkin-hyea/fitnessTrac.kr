@@ -43,7 +43,7 @@ const Login = () => {
                 const myJWT = translatedData.token;
                 alert(translatedData.message)
                 localStorage.setItem("token", myJWT)
-                navigate("/profile");
+                navigate("/myRoutines");
             }
 
         } catch (error) {
@@ -51,7 +51,8 @@ const Login = () => {
         }
     }
     return (
-        <div>
+        <div className="login">
+            <br />
             <form onSubmit={sendLoginReq}>
                 <input
                     type="text"

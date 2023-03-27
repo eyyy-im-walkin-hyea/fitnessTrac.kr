@@ -33,9 +33,10 @@ const Logout = (props) => {
     }
 
     return (
-        <div>
-            <h1>You have succesfully logged out!</h1>
-            <h2>Please visit 'Home' so see all posts or 'Account' to login again.</h2>
+        <div className="logout">
+            <br />
+            <h3>You have succesfully logged out!</h3>
+            <h3>Please use navigation buttons above to continue.</h3>
         </div>
     );
 };

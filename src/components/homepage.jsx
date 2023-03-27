@@ -9,11 +9,9 @@ const Homepage = (props) => {
     useEffect(() => {
         if (localStorage.getItem("token")) {
             props.setIsLoggedIn(true)
-            // console.log(localStorage.getItem("token"));
             fetchMyData();
         } else {
             props.setIsLoggedIn(false)
-            // console.log("No token exists!");
         }
         
         async function fetchMyData() {
@@ -34,11 +32,11 @@ const Homepage = (props) => {
     }, [])
 
     return (
-        <div className="login">
+        <div className="homepage">
             <div>
                 {
-                    props.isLoggedIn ? <p className="welcome">Welcome {myData.username}! Where would you like to go?</p>
-                    : <h3>Login / register above or <Link to="/posts">continue as a guest</Link> to view listings only.</h3>
+                    props.isLoggedIn ? <p className="welcome">Welcome {myData.username}! Please use navigation buttons above.</p>
+                    : <h3>Login / register above or <Link to="/routines">continue as a guest</Link> to view some routines.</h3>
                 }
             </div>
             <br />

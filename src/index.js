@@ -42,7 +42,7 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <div>
+            <div className="br">
                 <nav className="br-nav">
                     {/* <Link to="/placeholder" className="">Placeholder1</Link> */}
 
