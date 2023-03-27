@@ -34,7 +34,8 @@ const Logout = (props) => {
 
     return (
         <div>
-            <button onClick={logOut}>Logout</button>
+            <h1>You have succesfully logged out!</h1>
+            <h2>Please visit 'Home' so see all posts or 'Account' to login again.</h2>
         </div>
     );
 };
