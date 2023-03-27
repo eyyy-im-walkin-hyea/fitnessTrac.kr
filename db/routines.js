@@ -27,6 +27,9 @@ async function getRoutineById(routineId) {
             FROM routines
             WHERE id=$1;
         `, [routineId]);
+        console.log("DB rows", rows);
+        console.log("DB Routine", routine)
+        console.log("DB routineId", routineId)
   
         if (!routine) {
             throw {
@@ -44,7 +47,7 @@ async function getRoutineById(routineId) {
         routine.activities = activities;
         return routine;
     } catch (error) {
-        throw error;
+        console.error(error);
     };
 };
 
@@ -215,6 +218,7 @@ async function updateRoutine(id, fields = {}) {
 // Delete a routine by provided routine id.
 async function destroyRoutine(id) {
     try {
+        console.log("DB", id);
         await client.query(`
             DELETE FROM routines
             WHERE id=$1;
@@ -222,7 +226,7 @@ async function destroyRoutine(id) {
         
         return `DELETED ROUTINE NUMBER: ${id}`
     } catch(error) {
-        throw error;
+        next(error);
     };
 };
 
