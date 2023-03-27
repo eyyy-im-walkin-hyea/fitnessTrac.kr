@@ -6,6 +6,7 @@ const Routines = (props) => {
 
     const DATABASE_URL = `http://localhost:1337/api`
     const myJWT = localStorage.getItem("token");
+    const {userData} = props
 
     // ALL YOUR STATE ARE BELONG TO US!!
     const[routines, setRoutines] = useState([]);
@@ -163,6 +164,8 @@ return (
                     <div>
                         <p>ROUTINE: {singleRoutine.name}</p>
                         <p>GOAL: {singleRoutine.goal}</p>
+                        <p>CREATED BY: {props.userData.username}</p>
+                        {console.log("PROPS", userData)}
                         <p>ROUTINE ACTIVITES:</p>
                         <p>{singleRoutine.activities[0].name}</p>
                         <p>{singleRoutine.activities[0].description}</p>
@@ -172,7 +175,7 @@ return (
                     }
                     </div>
                 )
-            }) : <div> Nothing matching your ternary...</div>
+            }) : <div> Jsx ternary error in routines.jsx...</div>
         }</div>
     </section>
 )
