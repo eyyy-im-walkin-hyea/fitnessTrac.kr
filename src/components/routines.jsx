@@ -12,6 +12,7 @@ const Routines = (props) => {
     const[routines, setRoutines] = useState([]);
     const[routineName, setRoutineName] = useState('');
     const[routineGoal, setRoutineGoal] = useState('');
+    const [isPublic, setIsPublic] = useState(false);
     const[activities, setActivities] = useState([]);
     const[activityId, setActivityId] = useState(0);
     const[activityCount, setActivityCount] = useState(0);
@@ -37,7 +38,8 @@ const Routines = (props) => {
 
 
     // POST /routines
-    const postRoutinesData = async () => {
+    const postRoutinesData = async (event) => {
+        event.preventDefault();
         try {
             const response = await fetch(`${DATABASE_URL}/routines`, {
                 method: "POST",
@@ -46,13 +48,20 @@ const Routines = (props) => {
                 'Authorization': `Bearer ${myJWT}`
                 },
                 body: JSON.stringify({
+                isPublic: isPublic,
                 name: routineName,
                 goal: routineGoal,
-                isPublic: true
                 })
             });
             const result = await response.json();
-                console.log(result);
+                console.log("THIS IS CREATE RESULT.ID", result);
+            if(result.id) {
+                setRoutines([...routines, result]);
+                setRoutineName("");
+                setRoutineGoal("");
+            } else {
+                alert("Creating routine failed.");
+            }
             return result
         } catch (error) {
             console.error("Error w/ postRoutinesData", error);
@@ -156,6 +165,31 @@ useEffect(() => {
 // props userData setUserData
 return (
     <section>
+        {
+            props.isLoggedIn ?
+            <form onSubmit={postRoutinesData}>
+                <textarea
+                type="text"
+                placeholder="Enter Routine Name"
+                rows="2"
+                cols="25"
+                value={routineName}
+                onChange={(event) => setRoutineName(event.target.value)}/>
+                <textarea
+                type="text"
+                placeholder="Enter Routine Goal"
+                rows="2"
+                cols="25"
+                value={routineGoal}
+                onChange={(event) => setRoutineGoal(event.target.value)}/>
+                <input
+                type="checkbox"
+                placeholder="Make Your Routine Public"
+                value={isPublic}
+                onChange={() => setIsPublic(!isPublic)}/> <span> Is this a public routine? </span>
+                <button type="submit"> Create a New Routine </button>
+            </form> : <div> Please log in or create an account to make a routine. </div>
+        }
         <div>{
              routines.length ? routines.map((singleRoutine) => {
                 return (
@@ -164,11 +198,15 @@ return (
                     <div>
                         <p>ROUTINE: {singleRoutine.name}</p>
                         <p>GOAL: {singleRoutine.goal}</p>
-                        <p>CREATED BY: {props.userData.username}</p>
-                        {console.log("PROPS", userData)}
+                        {/* <p>CREATED BY: {props.userData.username}</p>
+                        {console.log("PROPS", userData)} */}
                         <p>ROUTINE ACTIVITES:</p>
-                        <p>{singleRoutine.activities[0].name}</p>
-                        <p>{singleRoutine.activities[0].description}</p>
+                        { singleRoutine.activities.length ?
+                        <div>
+                            <p>{singleRoutine.activities[0].name}</p>
+                            <p>{singleRoutine.activities[0].description}</p>
+                        </div> : <div> NO DATA LOADED </div>
+                        }
                         <br />
                     </div>
                     : <div>'No public routines to show'</div>
