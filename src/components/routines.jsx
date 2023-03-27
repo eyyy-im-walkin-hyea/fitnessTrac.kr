@@ -168,7 +168,7 @@ useEffect(() => {
 
 // props userData setUserData
 return (
-    <section>
+    <section className='routines'>
         {
             props.isLoggedIn ?
             <form onSubmit={postRoutinesData}>
@@ -200,7 +200,7 @@ return (
                 return (
                     <div key={singleRoutine.id}> 
                     { singleRoutine.isPublic ? 
-                    <div>
+                    <div className='box'>
                         <p>ROUTINE: {singleRoutine.name}</p>
                         <p>GOAL: {singleRoutine.goal}</p>
                         {/* <p>CREATED BY: {props.userData.username}</p>

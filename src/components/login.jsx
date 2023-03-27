@@ -41,7 +41,7 @@ const Login = () => {
                 alert("Login failed. Please try again!")
             } else {
                 const myJWT = translatedData.token;
-                alert(translatedData.message)
+                // alert(translatedData.message)
                 localStorage.setItem("token", myJWT)
                 navigate("/myRoutines");
             }
