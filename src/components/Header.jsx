@@ -9,25 +9,25 @@ const Header = (props) => {
         <div>
             <header id="headerFlex">
                 <nav id="navFlex">
-                    <Link to="/" id="home"> Home </Link>
-                    <ul>
-                        <li>
+                    <button><Link to="/" id="home"> Home </Link></button>
+                    <br/>
+                    <button><Link to="/activities" id="activities"> Activities</Link></button>
+                    <br/>
+                    <button><Link to="/routines" id="routines"> Routines </Link> </button>
+                    <br/>
                                 {
-                                    props.isLoggedIn ? <li><Link to="/myRoutines"> My Routines </Link></li> : <li><Link to="/reg"> Create Account </Link></li>
+                                    props.isLoggedIn ? <button><Link to="/myRoutines"> My Routines </Link></button> : <button><Link to="/register"> Create Account </Link></button>
                                 }
                                 {
-                                    props.isLoggedIn ? <li><Link to="/logout"
+                                    props.isLoggedIn ? <button><Link to="/logout"
                                         onClick={(() =>
                                             localStorage.removeItem("token")
                                         )}
-                                    > Logout </Link></li> : <li><Link to="/login"> Login </Link></li>
+                                    > Logout </Link></button> : <button><Link to="/login"> Login </Link></button>
                                 }
-                        </li>
-                    </ul>
-
 
                 </nav>
-                <h1> Stranger's Things & Stuff </h1>
+                <h1> Fitness Trac.kr </h1>
             </header>
 
         </div>
