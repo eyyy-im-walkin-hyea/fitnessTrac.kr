@@ -59,6 +59,8 @@ const Routines = (props) => {
                 setRoutines([...routines, result]);
                 setRoutineName("");
                 setRoutineGoal("");
+                setIsPublic(false);
+                document.location.reload();
             } else {
                 alert("Creating routine failed.");
             }
@@ -93,7 +95,8 @@ const Routines = (props) => {
 
     // DELETE /routines/:routineId
     // FIX THE {id} in the fetch
-    const deleteRoutinesData = async () => {
+    const deleteRoutinesData = async (id) => {
+        console.log("This is the DELETE ROUTINE ID", id);
         try {
           const response = await fetch(`${DATABASE_URL}/routines/${id}`, {
             method: "DELETE",
@@ -102,14 +105,16 @@ const Routines = (props) => {
             'Authorization': `Bearer ${myJWT}`
             },
           });
+          document.location.reload();
           const result = await response.json();
           console.log(result);
-          return result
         } catch (error) {
           console.error("Error w/ deleteRoutinesData",error);
         }
     }
-
+function deleteButton (event) {
+    deleteRoutinesData(event.target.value);
+}
     // POST /routines/:routineId/activities
     // FIX THE {routineId} in the fetch
     const postRoutinesIdActivitiesData = async () => {
@@ -157,7 +162,6 @@ useEffect(() => {
     getRoutinesData();
     postRoutinesData();
     patchRoutinesIdData();
-    deleteRoutinesData();
     postRoutinesIdActivitiesData();
     getActivitiesData();
 }, []);
@@ -186,7 +190,8 @@ return (
                 type="checkbox"
                 placeholder="Make Your Routine Public"
                 value={isPublic}
-                onChange={() => setIsPublic(!isPublic)}/> <span> Is this a public routine? </span>
+                onChange={() => setIsPublic(!isPublic)}/>
+                <label htmlFor="checkbox"> Is Your Routine Public? </label>
                 <button type="submit"> Create a New Routine </button>
             </form> : <div> Please log in or create an account to make a routine. </div>
         }
@@ -208,6 +213,7 @@ return (
                         </div> : <div> NO DATA LOADED </div>
                         }
                         <br />
+                        <button value={singleRoutine.id} onClick={deleteButton}> Delete This Routine </button>
                     </div>
                     : <div>'No public routines to show'</div>
                     }
