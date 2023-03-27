@@ -163,38 +163,13 @@ return (
                     <div>
                         <p>ROUTINE: {singleRoutine.name}</p>
                         <p>GOAL: {singleRoutine.goal}</p>
+                        <p>ROUTINE ACTIVITES:</p>
+                        <p>{singleRoutine.activities[0].name}</p>
+                        <p>{singleRoutine.activities[0].description}</p>
                         <br />
-                        <p>ACTIVITIES: </p>
-
-                        { activities.length ? activities.map((singleActivity) => {
-                        return (
-                            <div key={singleActivity.id}>
-                                <p>NAME: {singleActivity.name}</p>
-                                <p>DESCRIPTION: {singleActivity.description}</p>
-                                <p>COUNT: {singleActivity.count}</p>
-                                <p>DURATION: {singleActivity.duration}</p>
-                                <br />
-                            </div>
-                        )      
-                        }) : "" }
-
-                        {/* <p>Created by: {creatorName}</p> */}
-                        {/* {console.log("CL FROM JSX ",singleRoutine)} */}
                     </div>
                     : <div>'No public routines to show'</div>
                     }
-                    {/* { activities.length ? activities.map((singleActivity) => {
-                        return (
-                            <div key={singleActivity.id}>
-                                <p>NAME: {singleActivity.name}</p>
-                                <p>DESCRIPTION: {singleActivity.description}</p>
-                                <p>COUNT: {singleActivity.count}</p>
-                                <p>DURATION: {singleActivity.duration}</p>
-                                <br />
-                                <br />
-                            </div>
-                        )      
-                        }) : "" } */}
                     </div>
                 )
             }) : <div> Nothing matching your ternary...</div>
