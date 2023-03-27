@@ -4,7 +4,7 @@ const client = require("./client");
 // ROUTINE FUNCTIONS
 
 // Create a routine.
-async function createRoutine({ creatorId, isPublic, name, goal }) {
+async function createRoutine( {creatorId, isPublic, name, goal}) {
     try {
         const { rows } = await client.query(`
             INSERT INTO routines("creatorId", "isPublic", name, goal)

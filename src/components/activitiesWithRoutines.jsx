@@ -33,7 +33,7 @@ const ActWithRoutine = (props) => {
     return (
         <div> See all the routines from the activity! 
         {
-            publicRoutine.isPublic  ?
+            publicRoutine.length  ?
             publicRoutine.map((singleRoutine, index)=> {
                 return (
                     <section key={index}>
