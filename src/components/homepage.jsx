@@ -26,7 +26,7 @@ const Homepage = (props) => {
                 })
                 const translatedData = await response.json(); 
                 console.log(translatedData)
-                setMyData(translatedData.data)
+                setMyData(translatedData)
             } catch (e) {
                 console.log(e); 
             }

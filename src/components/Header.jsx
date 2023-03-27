@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 const Header = (props) => {
@@ -12,10 +12,8 @@ const Header = (props) => {
                     <Link to="/" id="home"> Home </Link>
                     <ul>
                         <li>
-                            <a> Account </a>
-                            <ul>
                                 {
-                                    props.isLoggedIn ? <li><Link to="/profile"> Profile </Link></li> : <li><Link to="/create"> Create Account </Link></li>
+                                    props.isLoggedIn ? <li><Link to="/myRoutines"> My Routines </Link></li> : <li><Link to="/reg"> Create Account </Link></li>
                                 }
                                 {
                                     props.isLoggedIn ? <li><Link to="/logout"
@@ -24,9 +22,6 @@ const Header = (props) => {
                                         )}
                                     > Logout </Link></li> : <li><Link to="/login"> Login </Link></li>
                                 }
-
-
-                            </ul>
                         </li>
                     </ul>
 

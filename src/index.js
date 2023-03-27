@@ -2,6 +2,7 @@ import {createRoot} from "react-dom/client";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Activities, Homepage, Login, MyRoutines, Registration, Routines, Logout, ActWithRoutine } from "./components/index";
 import { useState, useEffect } from "react";
+import Header from "./components/Header";
 const DATABASE_URL = `http://localhost:1337/api`
 
 const App = () => {
@@ -48,12 +49,14 @@ const App = () => {
                 </nav>
 
                 {/* <Header/> */}
-
+                <header>
+                    <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+                </header>
                 <Routes>
                     <Route path="/" element={<Homepage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}/>
                     <Route path="/activities" element={<Activities isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData} />}/>
                     <Route path="/login" element={<Login />}/>
-                    <Route path="/profile" element={<MyRoutines isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData}/>}/>
+                    <Route path="/myRoutines" element={<MyRoutines isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData}/>}/>
                     <Route path="/register" element={<Registration />}/>
                     <Route path="/routines" element={<Routines isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} userData={userData} setUserData={setUserData}/>}/>
                     <Route path="/logout" element={<Logout isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}/>
