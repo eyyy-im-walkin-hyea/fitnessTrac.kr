@@ -121,7 +121,7 @@ const Activities = (props) => {
                         value={description}
                         onChange={(event) => setDescription(event.target.value)} />
                         <button type="submit" id="sendMessageButton"> Create New Activity  </button>
-                    </form> : <div className="form-createAct-reject"> You do not have access to send a message. Please login or create account. </div>
+                    </form> : <div className="form-createAct-reject"> Please log in or create an account to make an activity. </div>
                 }
                 {
                     activities ? activities.map((singleActivity, index) => {

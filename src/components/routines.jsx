@@ -199,24 +199,27 @@ return (
              routines.length ? routines.map((singleRoutine) => {
                 return (
                     <div key={singleRoutine.id}> 
-                    { singleRoutine.isPublic ? 
-                    <div className='box'>
-                        <p>ROUTINE: {singleRoutine.name}</p>
-                        <p>GOAL: {singleRoutine.goal}</p>
-                        {/* <p>CREATED BY: {props.userData.username}</p>
-                        {console.log("PROPS", userData)} */}
-                        <p>ROUTINE ACTIVITES:</p>
-                        { singleRoutine.activities.length ?
-                        <div>
-                            <p>{singleRoutine.activities[0].name}</p>
-                            <p>{singleRoutine.activities[0].description}</p>
-                        </div> : <div> NO DATA LOADED </div>
+                        { singleRoutine.isPublic ? 
+                        <div className='box'>
+                            <p>ROUTINE: {singleRoutine.name}</p>
+                            <p>GOAL: {singleRoutine.goal}</p>
+                            {/* <p>CREATED BY: {props.userData.username}</p>
+                            {console.log("PROPS", userData)} */}
+                            <p>ROUTINE ACTIVITES:</p>
+                            { singleRoutine.activities.length ?
+                            <div>
+                                <p>{singleRoutine.activities[0].name}</p>
+                                <p>{singleRoutine.activities[0].description}</p>
+                            </div> : <div> NO DATA LOADED </div>
+                            }
+                            <br />
+                            
+                        </div>
+                        : <div>'No public routines to show'</div>
                         }
-                        <br />
-                        <button value={singleRoutine.id} onClick={deleteButton}> Delete This Routine </button>
-                    </div>
-                    : <div>'No public routines to show'</div>
-                    }
+                        { props.isLoggedIn ? 
+                        <button value={singleRoutine.id} onClick={deleteButton}> Delete This Routine </button> : ""
+                        }
                     </div>
                 )
             }) : <div> Jsx ternary error in routines.jsx...</div>

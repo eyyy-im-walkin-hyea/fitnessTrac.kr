@@ -1,6 +1,16 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 
 const Header = (props) => {
+
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            props.setIsLoggedIn(true)
+            
+        } else {
+            props.setIsLoggedIn(false)
+        }
+    }, [])
 
     return (
         <div className="header-nav">
