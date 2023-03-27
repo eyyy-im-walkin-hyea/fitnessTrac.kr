@@ -1,0 +1,10 @@
+
+.br-header{
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding-bottom: 5px;
+}
+.act-sec{
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    background-color: aquamarine;
+}

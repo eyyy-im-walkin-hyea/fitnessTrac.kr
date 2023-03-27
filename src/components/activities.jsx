@@ -101,17 +101,37 @@ const Activities = (props) => {
 
 
     return (
-        <div> 
-            <section>
+   
+            <section className="act-sec">
+            { 
+                    props.isLoggedIn ? 
+                    <form className="form-createAct" onSubmit={createActivity}>
+                        <textarea
+                        type="text" 
+                        placeholder="Enter Activity Name"
+                        rows="2"
+                        cols="25"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}/>
+                        <textarea
+                        type="text"
+                        placeholder="Enter Activity Description"
+                        rows="2"
+                        cols="25"
+                        value={description}
+                        onChange={(event) => setDescription(event.target.value)} />
+                        <button type="submit" id="sendMessageButton"> Create New Activity  </button>
+                    </form> : <div className="form-createAct-reject"> You do not have access to send a message. Please login or create account. </div>
+                }
                 {
                     activities ? activities.map((singleActivity, index) => {
                         return (
-                            <div key={singleActivity.id}>
-                                <h2> Activity Name: <u>{singleActivity.name}</u> </h2>
+                            <div className="act1" key={singleActivity.id}>
+                                <h2 style={{color: "blue"}}> Activity Name: <u>{singleActivity.name}</u> </h2>
                                 <h2> Activity Description: <strong>{singleActivity.description}</strong></h2>
                                 {
                                     props.isLoggedIn ?
-                                    <form  onSubmit={updateButton}>
+                                    <form className="upd-act-form" onSubmit={updateButton}>
                                         <textarea
                                         type="text"
                                         placeholder="Update Activity Name"
@@ -130,38 +150,15 @@ const Activities = (props) => {
                                         <Link to={`/activities/${singleActivity.id}/routines`}> Click here for routines with this activity.</Link>
 
                                     </form>
-                                    : <div> Please login or create an account to update an activity.</div>
+                                    : <div className="form-updAct-reject"> Please login or create an account to update an activity.</div>
                                 }
                                
                             </div>
                         )
                     }) : <h1> No activities loaded.</h1>
                 }
-                 { 
-                    props.isLoggedIn ? 
-                    <form className="messageSender" onSubmit={createActivity}>
-                        <textarea
-                        type="text" 
-                        placeholder="Enter Activity Name"
-                        rows="2"
-                        cols="25"
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}/>
-                        <textarea
-                        type="text"
-                        placeholder="Enter Activity Description"
-                        rows="2"
-                        cols="25"
-                        value={description}
-                        onChange={(event) => setDescription(event.target.value)} />
-                        <button type="submit" id="sendMessageButton"> Create New Activity  </button>
-                    </form> : <div className="messageSender"> You do not have access to send a message. Please login or create account. </div>
-                }
             </section>
             
-
-
-        </div>
     )
 }
 
