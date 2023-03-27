@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const DATABASE_URL = `http://localhost:1337/api`
 
-const Login = () => {
+
+const Login = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate()
+
+    useEffect(() => {
+        console.log(localStorage.getItem("token"));
+        if (localStorage.getItem("token")) {
+            props.setIsLoggedIn(true);
+            console.log("New token being generated!")
+        } else {
+            props.setIsLoggedIn(false);
+            console.log("No token exists!");
+        }
+    }, [props.isLoggedIn]); 
 
     async function sendLoginReq(e) {
         e.preventDefault();
@@ -43,6 +55,7 @@ const Login = () => {
                 const myJWT = translatedData.token;
                 // alert(translatedData.message)
                 localStorage.setItem("token", myJWT)
+                
                 navigate("/myRoutines");
             }
 

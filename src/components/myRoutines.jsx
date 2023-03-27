@@ -18,6 +18,17 @@ const MyRoutines = (props) => {
     const[activityCount, setActivityCount] = useState(0);
     const[activityDuration, setactivityDuration] = useState(0);
 
+    useEffect(() => {
+        console.log(localStorage.getItem("token"));
+        if (localStorage.getItem("token")) {
+            props.setIsLoggedIn(true);
+            console.log("New token being generated!")
+        } else {
+            props.setIsLoggedIn(false);
+            console.log("No token exists!");
+        }
+    }, [props.isLoggedIn]); 
+
     // GET /routines
     const getRoutinesData = async () => {
         try {
