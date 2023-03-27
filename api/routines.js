@@ -32,16 +32,16 @@ routinesRouter.get("/", async (req, res) => {
 
 // POST request - Purpose: Create a new routine as a logged in user.
 routinesRouter.post('/',  async (req, res, next) => {
-    const { isPublic, name, goal,  } = req.body;
-    
+    const { isPublic, name, goal } = req.body;
+    console.log(req.body)
     try {
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
         
-        const routine = await createRoutine({ creatorId: decryptedUserToken.id, isPublic, name, goal});
-    
-        if (routine && routine.creatorId == decryptedUserToken.id ) {
-            res.send({routine});
+        
+        if (decryptedUserToken.id ) {
+            const routine = await createRoutine( {creatorId: decryptedUserToken.id, isPublic, name, goal});
+            res.send(routine);
         } else {
             res.send({
                 name: "routinePostError",
