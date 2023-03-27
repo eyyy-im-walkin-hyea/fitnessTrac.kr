@@ -6,14 +6,14 @@ const Header = (props) => {
 
 
     return (
-        <div>
-            <header id="headerFlex">
-                <nav id="navFlex">
-                    <button><Link to="/" id="home"> Home </Link></button>
+        <div className="header1">
+            <header>
+                <nav className="header-nav">
+                    <button><Link to="/" id="homebtn"> Home </Link></button>
                     <br/>
-                    <button><Link to="/activities" id="activities"> Activities</Link></button>
+                    <button><Link to="/activities" id="activitiesbtn"> Activities</Link></button>
                     <br/>
-                    <button><Link to="/routines" id="routines"> Routines </Link> </button>
+                    <button><Link to="/routines" id="routinesbtn"> Routines </Link> </button>
                     <br/>
                                 {
                                     props.isLoggedIn ? <button><Link to="/myRoutines"> My Routines </Link></button> : <button><Link to="/register"> Create Account </Link></button>

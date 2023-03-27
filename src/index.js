@@ -43,13 +43,13 @@ const App = () => {
     return (
         <BrowserRouter>
             <div>
-                <nav className="">
+                <nav className="br-nav">
                     {/* <Link to="/placeholder" className="">Placeholder1</Link> */}
 
                 </nav>
 
                 {/* <Header/> */}
-                <header>
+                <header className="br-header">
                     <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
                 </header>
                 <Routes>

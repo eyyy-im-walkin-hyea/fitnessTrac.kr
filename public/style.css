@@ -1,0 +1,20 @@
+.header-nav{
+    display: flex; flex-direction: row; justify-content: center; align-items: center;
+    width: 100%;
+    background-color:aquamarine;
+}
+button{
+    border-radius: 4px;
+    background-color: blueviolet;
+}
+
+
+/* .br-header{
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding-bottom: 5px;
+}
+.act-sec{
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    background-color: aquamarine;
+} */
