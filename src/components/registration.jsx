@@ -59,8 +59,8 @@ const Register = () => {
         }
     }
     return (
-        <div>
-            <h2> Fill in the forms below to create an account:</h2>
+        <div className="login">
+            <h3> Fill in the forms below to create an account:</h3>
             <form onSubmit={sendRegisterNewAccountReq}>
                 <input
                     type="text"

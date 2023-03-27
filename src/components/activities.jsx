@@ -102,7 +102,7 @@ const Activities = (props) => {
 
     return (
    
-            <section className="act-sec">
+            <section className="routines">
             { 
                     props.isLoggedIn ? 
                     <form className="form-createAct" onSubmit={createActivity}>
@@ -126,9 +126,9 @@ const Activities = (props) => {
                 {
                     activities ? activities.map((singleActivity, index) => {
                         return (
-                            <div className="act1" key={singleActivity.id}>
-                                <h2 style={{color: "blue"}}> Activity Name: <u>{singleActivity.name}</u> </h2>
-                                <h2> Activity Description: <strong>{singleActivity.description}</strong></h2>
+                            <div className='box' key={singleActivity.id}>
+                                <p> Activity Name: {singleActivity.name}</p>
+                                <p> Activity Description: {singleActivity.description}</p>
                                 {
                                     props.isLoggedIn ?
                                     <form className="upd-act-form" onSubmit={updateButton}>
@@ -155,7 +155,7 @@ const Activities = (props) => {
                                
                             </div>
                         )
-                    }) : <h1> No activities loaded.</h1>
+                    }) : <h3> No activities loaded.</h3>
                 }
             </section>
             

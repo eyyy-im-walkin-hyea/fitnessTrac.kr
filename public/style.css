@@ -1,20 +1,54 @@
+body{
+    background-image: url("./images/wallpaper.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: white;
+}
+
 .header-nav{
     display: flex; flex-direction: row; justify-content: center; align-items: center;
-    width: 100%;
-    background-color:aquamarine;
+    top: 0; left: 0; right: 0; position: fixed; width: 100%;
+    background-color: black;
 }
 button{
     border-radius: 4px;
-    background-color: blueviolet;
+    margin-left: 3px; margin-right: 3px; margin-top: 5px;
+    box-shadow: 1px 1px px black;
 }
 
-
-/* .br-header{
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    padding-bottom: 5px;
-}
-.act-sec{
+.title{
     display: flex; flex-direction: column; justify-content: center; align-items: center;
-    background-color: aquamarine;
-} */
+    width: 100%;
+    font-size: 40px;
+    text-shadow: 2px 2px 3px rgb(92, 240, 0);
+}
+
+.br{
+    margin-top: 200px;
+}
+
+.box{
+    border: 2px solid white;
+    width: 600px;
+    border-radius: 10px;
+    padding-left: 20px;padding-top: 10px; padding-bottom: 10px; padding-right: 20px;
+    margin: 10px;
+}
+
+.homepage{
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    width: 100%;
+
+}
+
+.routines{
+    padding-left: 100px;
+}
+
+.login{
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+}
+
+.logout{
+    display: flex; flex-direction: column; justify-content: center; align-items: center; 
+}
