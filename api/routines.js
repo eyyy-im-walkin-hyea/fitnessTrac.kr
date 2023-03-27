@@ -114,11 +114,11 @@ const updateFields = {};
 // DELETE request - Purpose: Hard delete a routine as a logged in user.
 routinesRouter.delete('/:routineId',  async (req, res, next) => {
     const {routineId} = req.params;
-    const routine = await getRoutineById(req.params.routineId);
+    // const routine = await getRoutineById(req.params.routineId);
     try {
         const userToken = req.headers.authorization.split(" ")[1];
         const decryptedUserToken = jwt.verify(userToken, process.env.JWT_SECRET);
-        if (routine.creatorId == decryptedUserToken.id) {
+        if (decryptedUserToken.id) {
             const deletedRoutine = await destroyRoutine(routineId);
             res.send(deletedRoutine);
         } else {
