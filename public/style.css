@@ -1,7 +1,9 @@
 body{
-    background-image: url("./images/wallpaper.jpg");
+    background-image: url("./images/wallpaper-m.jpg");
+    background-size: 200%;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-color: black;
     color: white;
 }
 
