@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const DATABASE_URL = `http://localhost:1337/api`
+const DATABASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
 
 const Register = () => {
     const [newUsername, setNewUsername] = useState("");

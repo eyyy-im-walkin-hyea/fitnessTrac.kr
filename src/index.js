@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { Activities, Homepage, Login, MyRoutines, Registration, Routines, Logout, ActWithRoutine } from "./components/index";
 import { useState, useEffect } from "react";
 import Header from "./components/Header";
-const DATABASE_URL = `http://localhost:1337/api`
+const DATABASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,8 +44,6 @@ const App = () => {
         <BrowserRouter>
             <div className="br">
                 <nav className="br-nav">
-                    {/* <Link to="/placeholder" className="">Placeholder1</Link> */}
-
                 </nav>
 
                 {/* <Header/> */}

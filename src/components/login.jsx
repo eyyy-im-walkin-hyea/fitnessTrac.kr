@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-const DATABASE_URL = `http://localhost:1337/api`
+const DATABASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
 
 
 const Login = (props) => {
@@ -53,7 +53,6 @@ const Login = (props) => {
                 alert("Login failed. Please try again!")
             } else {
                 const myJWT = translatedData.token;
-                // alert(translatedData.message)
                 localStorage.setItem("token", myJWT)
                 
                 navigate("/myRoutines");

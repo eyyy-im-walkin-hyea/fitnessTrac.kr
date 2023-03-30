@@ -1,6 +1,6 @@
-import {useParams, Link} from "react-router-dom";
+import {useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-const DATABASE_URL = `http://localhost:1337/api`
+const DATABASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
 
 const ActWithRoutine = (props) => {
     const { activityId } = useParams();

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 const Routines = (props) => {
 
-    const DATABASE_URL = `http://localhost:1337/api`
+    const DATABASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
     const myJWT = localStorage.getItem("token");
     const {userData} = props
 
