@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-const BASE_URL = `http://localhost:1337/api`
+const BASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
 
 const Homepage = (props) => {
     const [myData, setMyData] = useState({})

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-// THIS IS BOILER PLATE FROM routines.jsx and we did not have time to pull / render the correct data.
+
 const MyRoutines = (props) => {
 
-    const DATABASE_URL = `http://localhost:1337/api`
+    const DATABASE_URL = `https://fitnesstrackr-zvm8.onrender.com/api`
     const myJWT = localStorage.getItem("token");
     const {userData} = props
 
